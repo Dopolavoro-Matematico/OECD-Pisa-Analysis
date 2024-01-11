@@ -1,0 +1,40 @@
+#$student 
+#ST004D01T    'Student (Standardized) Gender'
+#ST250Q01JA   'Which of the following are in your [home]: A room of your own'
+#ST250Q02JA   'Which of the following are in your [home]: A computer (laptop, desktop, or tablet) that you can use for school work'
+#MATHPREF     'Preference of Math over other core subjects'   
+#MATHEASE     'Perception of Mathematics as easier than other subjects'   
+#MATHMOT      'Motivation to do well in mathematics'
+#ANXMAT       'Mathematics Anxiety (WLE)' 
+#MATHPERS     'Effort and Persistence in Mathematics  (WLE)'  
+#***err ICTQUAL      'Quality of access to ICT (WLE)'  
+#PQMIMP       'Parent Attitudes Toward Mathematics (WLE)'      
+
+#$school
+#SUBNATIO         'Adjudicated sub-region code 7-digit code (3-digit country code + region ID + stratum ID)'  
+#REGION           'REGION'  
+#SC211Q02JA       'Percentage [15-year-old modal grade] students who: Students with special learning needs' 
+#SC211Q03JA       'Percentage [15-year-old modal grade] students who: Students from socioeconomically disadvantaged homes' 
+#SC211Q04JA       'Percentage [15-year-old modal grade] students who: Students who are immigrants (not including refugees)'
+#SC211Q05JA       'Percentage [15-year-old modal grade] students who: Students who have parents who have immigrated'
+#SC211Q06JA       'Percentage [15-year-old modal grade] students who: Students who are refugees' 
+#SC175Q01JA       'Minutes in [class period] for: Mathematics'    
+
+#,"MATHPERS","ICTQUA","PQMIMP"
+library("devtools")
+library("intsvy")
+library("data.table") 
+
+dire <- "/Users/alendo/Documents/OECD"
+pisa <- pisa.select.merge(folder = dire,
+                          student.file="CY08MSP_STU_QQQ.sav",
+                          school.file="CY08MSP_SCH_QQQ.sav",
+                          student= c("ESCS", "ST004D01T","ST250Q01JA","ST250Q02JA","MATHPREF","MATHEASE","MATHMOT","ANXMAT","MATHPERS","PQMIMP"),
+                          school = c("SUBNATIO","REGION","SC211Q04JA","SC211Q06JA"),
+                          countries = c("ITA"))
+
+dt<-data.table(pisa)                    
+dt_pisa<-dt[ , .(ESCS, ST004D01T,ST250Q01JA,ST250Q02JA,MATHPREF,MATHEASE,MATHMOT,ANXMAT,MATHPERS,PQMIMP,SUBNATIO,REGION,SC211Q04JA,SC211Q06JA)]
+dt_pisa[ST004D01T=="Female" & MATHPREF=="No preference for mathematics over other subjects"]
+write.csv(dt_pisa,file="dt_pisa.csv")
+
