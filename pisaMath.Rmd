@@ -9,10 +9,13 @@
 #MATHPERS     'Effort and Persistence in Mathematics  (WLE)'  
 #***err ICTQUAL      'Quality of access to ICT (WLE)'  
 #PQMIMP       'Parent Attitudes Toward Mathematics (WLE)'      
-
+#-------------------------
 #$school
-#SUBNATIO         'Adjudicated sub-region code 7-digit code (3-digit country code + region ID + stratum ID)'  
-#REGION           'REGION'  
+#CNTSCHID         'Intl. School ID'
+#SC001Q01TA       'Which of the following definitions best describes the community in which your school is located?'
+#SC011Q01TA       'Which of the following statements best describes the schooling available to students in your location?'                                                               
+#SC002Q01TA       'As of [February 1, 2021], what was the total school enrolment (number of students): Number of boys:'                                                              
+#SC002Q02TA       'As of [February 1, 2021], what was the total school enrolment (number of students): Number of girls:' 
 #SC211Q02JA       'Percentage [15-year-old modal grade] students who: Students with special learning needs' 
 #SC211Q03JA       'Percentage [15-year-old modal grade] students who: Students from socioeconomically disadvantaged homes' 
 #SC211Q04JA       'Percentage [15-year-old modal grade] students who: Students who are immigrants (not including refugees)'
@@ -29,10 +32,17 @@ dire <- "/Users/alendo/Documents/OECD"
 pisa <- pisa.select.merge(folder = dire,
                           student.file="CY08MSP_STU_QQQ.sav",
                           school.file="CY08MSP_SCH_QQQ.sav",
-                          student= c("ESCS", "ST004D01T","ST250Q01JA","ST250Q02JA","MATHPREF","MATHEASE","MATHMOT","ANXMAT","MATHPERS","PQMIMP"),
-                          school = c("SUBNATIO","REGION","SC211Q04JA","SC211Q06JA"),
+                          student= c("ESCS", "ST004D01T", "ST250Q01JA", "ST250Q02JA", "MATHPREF", "MATHEASE", "MATHMOT", "ANXMAT", "MATHPERS", "PQMIMP"),
+                          school = c("SC001Q01TA", "SC011Q01TA", "SC002Q01TA", "SC002Q02TA", "SC211Q04JA", "SC211Q06JA"),
                           countries = c("ITA"))
 
+options(max.print=9999)
+# questa dovrebbe essere la media della performance in matematica suddivisa per maschi e femmine in funzione della scuola
+pisa_by_school <- pisa.mean.pv(pvlabel = paste0("PV", 1:10, "MATH"), by = c("CNTSCHID", "ST004D01T"), data = pisa)
+
+write.csv(pisa_by_school, "pisa_by_school.csv", row.names=TRUE)
+
+# data table
 dt<-data.table(pisa)                    
 dt_pisa<-dt[ , .(ESCS, ST004D01T,ST250Q01JA,ST250Q02JA,MATHPREF,MATHEASE,MATHMOT,ANXMAT,MATHPERS,PQMIMP,SUBNATIO,REGION,SC211Q04JA,SC211Q06JA)]
 dt_pisa[ST004D01T=="Female" & MATHPREF=="No preference for mathematics over other subjects"]
