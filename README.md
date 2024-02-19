@@ -35,7 +35,7 @@ L'analisi preliminare suggerisce una forte correlazione tra i punteggi in matema
 
 - Dalle analisi si evidenzia una differenza di gender che vogliamo analizzare . Può essere un effetto di una selezione 
 
-- [To do list delle analisi]
+- Getting started
 https://colab.research.google.com/drive/14rCdS9v5UPeQDEu_FTHAdyUOdY7HH0ZQ?authuser=1#scrollTo=_IHDh-Hm31sC
 
 ## Azioni
